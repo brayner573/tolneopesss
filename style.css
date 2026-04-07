@@ -1,31 +1,93 @@
 body {
+  margin: 0;
   background: #0a0a0f;
   color: white;
-  font-family: Arial;
-  text-align: center;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* HERO */
+.hero {
+  height: 100vh;
+  background: linear-gradient(180deg, #0a0a0f, #1a1a2e);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero h1 {
+  font-family: 'Bebas Neue';
+  font-size: 80px;
+  color: gold;
+}
+
+.hero p {
+  color: #ccc;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+.btn {
+  background: red;
+  padding: 10px 20px;
+  margin: 5px;
+  text-decoration: none;
+  color: white;
+  border-radius: 5px;
+}
+
+.btn.green {
+  background: #25D366;
+}
+
+/* FORM */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 input {
   margin: 5px;
   padding: 10px;
-  width: 200px;
+  width: 250px;
+  background: #111;
+  border: 1px solid gold;
+  color: white;
 }
 
 button {
-  padding: 10px 20px;
-  background: red;
-  color: white;
+  background: gold;
   border: none;
+  padding: 10px;
   cursor: pointer;
 }
 
+/* CARDS */
 .team-card {
+  background: #111;
   border: 1px solid gold;
-  margin: 10px;
+  margin: 10px auto;
   padding: 10px;
+  width: 300px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.team-card:hover {
+  transform: scale(1.05);
+}
+
+/* REDES */
+.redes {
+  text-align: center;
+  margin: 20px;
 }
 
 .redes a {
   margin: 10px;
   color: gold;
+  font-weight: bold;
 }

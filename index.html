@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Torneo Dota 2</title>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🔥 TORNEO DOTA 2 🔥</h1>
+
+<!-- REDES -->
+<div class="redes">
+  <a href="https://tiktok.com/@brayner722" target="_blank">🎵 TikTok</a>
+  <a href="https://kick.com/brayner45" target="_blank">🎮 Kick</a>
+  <a href="https://chat.whatsapp.com/EDLgOCOg7dACXYFtHRhDIu?mode=gi_t" target="_blank">📲 WhatsApp</a>
+</div>
+
+<h2>Registrar Equipo</h2>
+
+<form id="registroForm">
+  <input id="teamName" placeholder="Nombre del equipo"><br>
+  <input id="captain" placeholder="Capitán"><br>
+  <input id="contact" placeholder="WhatsApp"><br>
+
+  <input id="p1" placeholder="Jugador 1"><br>
+  <input id="p2" placeholder="Jugador 2"><br>
+  <input id="p3" placeholder="Jugador 3"><br>
+  <input id="p4" placeholder="Jugador 4"><br>
+  <input id="p5" placeholder="Jugador 5"><br>
+
+  <button type="submit">Registrar</button>
+</form>
+
+<h2>Equipos Registrados</h2>
+<p>Total: <span id="totalEquipos">0</span></p>
+<p>Cupos libres: <span id="cuposLibres">16</span></p>
+
+<div id="teamsContainer"></div>
+
+<script src="firebase-config.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

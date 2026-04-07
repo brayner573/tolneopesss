@@ -2,16 +2,50 @@ const WHATSAPP_URL = "https://chat.whatsapp.com/EDLgOCOg7dACXYFtHRhDIu?mode=gi_t
 const COLLECTION = "equipos";
 const MAX_TEAMS = 16;
 
+const form = document.getElementById("registroForm");
+const container = document.getElementById("teamsContainer");
+const totalEl = document.getElementById("totalEquipos");
+const cuposEl = document.getElementById("cuposLibres");
+
+// MENSAJE BONITO
+function showMessage(text, color = "green") {
+  let msg = document.getElementById("msg");
+
+  if (!msg) {
+    msg = document.createElement("div");
+    msg.id = "msg";
+    document.body.appendChild(msg);
+  }
+
+  msg.innerText = text;
+  msg.style.background = color;
+  msg.style.position = "fixed";
+  msg.style.bottom = "20px";
+  msg.style.left = "50%";
+  msg.style.transform = "translateX(-50%)";
+  msg.style.padding = "10px 20px";
+  msg.style.color = "white";
+  msg.style.borderRadius = "5px";
+  msg.style.zIndex = "9999";
+
+  setTimeout(() => msg.remove(), 3000);
+}
+
 // CARGAR EQUIPOS EN TIEMPO REAL
 function loadTeams() {
-  const container = document.getElementById("teamsContainer");
-
   db.collection(COLLECTION)
     .orderBy("timestamp", "asc")
     .onSnapshot(snapshot => {
+
       container.innerHTML = "";
-      document.getElementById("totalEquipos").textContent = snapshot.size;
-      document.getElementById("cuposLibres").textContent = MAX_TEAMS - snapshot.size;
+
+      totalEl.textContent = snapshot.size;
+      cuposEl.textContent = MAX_TEAMS - snapshot.size;
+
+      if (snapshot.empty) {
+        container.innerHTML = "<p>No hay equipos aún ⚔</p>";
+        return;
+      }
 
       snapshot.forEach(doc => {
         const data = doc.data();
@@ -23,7 +57,9 @@ function loadTeams() {
           <h3>${data.teamName}</h3>
           <p>👑 ${data.captain}</p>
           <p>📱 ${data.contact}</p>
-          <p>⚔ ${data.players.join(", ")}</p>
+          <div class="players">
+            ${data.players.map(p => `<span>⚔ ${p}</span>`).join("")}
+          </div>
         `;
 
         container.appendChild(div);
@@ -32,41 +68,76 @@ function loadTeams() {
 }
 
 // REGISTRAR EQUIPO
-document.getElementById("registroForm").addEventListener("submit", async (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const teamName = document.getElementById("teamName").value;
-  const captain = document.getElementById("captain").value;
-  const contact = document.getElementById("contact").value;
+  const teamName = document.getElementById("teamName").value.trim();
+  const captain = document.getElementById("captain").value.trim();
+  const contact = document.getElementById("contact").value.trim();
 
   const players = [
-    document.getElementById("p1").value,
-    document.getElementById("p2").value,
-    document.getElementById("p3").value,
-    document.getElementById("p4").value,
-    document.getElementById("p5").value
+    p1.value.trim(),
+    p2.value.trim(),
+    p3.value.trim(),
+    p4.value.trim(),
+    p5.value.trim()
   ];
 
+  // VALIDACIÓN
   if (!teamName || !captain || !contact || players.includes("")) {
-    alert("Completa todos los campos");
+    showMessage("⚠ Completa todos los campos", "red");
     return;
   }
 
-  // GUARDAR EN FIREBASE
-  await db.collection(COLLECTION).add({
-    teamName,
-    captain,
-    contact,
-    players,
-    timestamp: new Date()
-  });
+  // VALIDAR TELÉFONO
+  if (!/^[0-9+ ]+$/.test(contact)) {
+    showMessage("⚠ WhatsApp inválido", "red");
+    return;
+  }
 
-  alert("Equipo registrado correctamente");
+  try {
+    // VERIFICAR LÍMITE
+    const snap = await db.collection(COLLECTION).get();
+    if (snap.size >= MAX_TEAMS) {
+      showMessage("🚫 Cupos llenos", "red");
+      return;
+    }
 
-  // REDIRECCIÓN A WHATSAPP
-  window.open(WHATSAPP_URL, "_blank");
+    // EVITAR DUPLICADOS
+    const exist = await db.collection(COLLECTION)
+      .where("teamName", "==", teamName)
+      .get();
 
-  document.getElementById("registroForm").reset();
+    if (!exist.empty) {
+      showMessage("⚠ Ese equipo ya existe", "red");
+      return;
+    }
+
+    // LOADING
+    showMessage("⏳ Registrando...", "blue");
+
+    // GUARDAR
+    await db.collection(COLLECTION).add({
+      teamName,
+      captain,
+      contact,
+      players,
+      timestamp: new Date()
+    });
+
+    showMessage("✅ Equipo registrado", "green");
+
+    form.reset();
+
+    // ABRIR WHATSAPP
+    setTimeout(() => {
+      window.open(WHATSAPP_URL, "_blank");
+    }, 1000);
+
+  } catch (error) {
+    console.error(error);
+    showMessage("❌ Error al guardar", "red");
+  }
 });
 
 // INICIAR

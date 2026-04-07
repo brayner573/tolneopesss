@@ -3,60 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DOTA 2 TOURNAMENT</title>
+<title>Torneo Dota Pro</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<style>
+body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(circle at top, #111827, #020617);
+    color: white;
+}
 
-<link rel="stylesheet" href="style.css">
+/* NAV */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+}
+
+nav h1 {
+    color: #22c55e;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    background: #22c55e;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.hero h2 {
+    font-size: 40px;
+}
+
+.hero p {
+    color: #94a3b8;
+}
+
+/* FORM */
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: #020617;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #22c55e;
+    box-shadow: 0 0 20px rgba(34,197,94,0.2);
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: #111827;
+    border: 1px solid #22c55e;
+    color: white;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #22c55e;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* TEAMS */
+.team {
+    background: #111827;
+    padding: 15px;
+    margin-top: 10px;
+    border-left: 5px solid #22c55e;
+    border-radius: 5px;
+}
+
+/* ANIMATION */
+.card:hover {
+    transform: scale(1.02);
+    transition: 0.3s;
+}
+</style>
 </head>
 
 <body>
 
-<header class="hero">
-  <h1>THE INTERNATIONAL STYLE</h1>
-  <p>TORNEO DOTA 2</p>
+<nav>
+    <h1>⚔ DOTA PRO</h1>
+    <a href="https://chat.whatsapp.com/EDLgOCOg7dACXYFtHRhDIu?mode=gi_t" target="_blank">WhatsApp</a>
+</nav>
 
-  <div class="buttons">
-    <a href="#registro" class="btn">REGISTRAR</a>
-    <a href="https://chat.whatsapp.com/EDLgOCOg7dACXYFtHRhDIu?mode=gi_t" target="_blank" class="btn green">WHATSAPP</a>
-  </div>
-</header>
-
-<!-- REDES -->
-<div class="redes">
-  <a href="https://tiktok.com/@brayner722" target="_blank">🎵 TikTok</a>
-  <a href="https://kick.com/brayner45" target="_blank">🎮 Kick</a>
+<div class="hero">
+    <h2>🔥 Torneo Dota Lima Pro 🔥</h2>
+    <p>Registra tu equipo y compite en el torneo más épico</p>
 </div>
 
-<section id="registro">
-<h2>REGISTRAR EQUIPO</h2>
+<div class="container">
 
-<form id="registroForm">
-<input id="teamName" placeholder="Nombre del equipo">
-<input id="captain" placeholder="Capitán">
-<input id="contact" placeholder="WhatsApp">
+    <div class="card">
+        <h3>📩 Registrar Equipo</h3>
 
-<input id="p1" placeholder="Jugador 1">
-<input id="p2" placeholder="Jugador 2">
-<input id="p3" placeholder="Jugador 3">
-<input id="p4" placeholder="Jugador 4">
-<input id="p5" placeholder="Jugador 5">
+        <input id="teamName" placeholder="Nombre del equipo">
+        <input id="captain" placeholder="Capitán">
+        <input id="contact" placeholder="WhatsApp">
 
-<button type="submit">INSCRIBIR</button>
-</form>
-</section>
+        <button onclick="registrar()">Registrar</button>
+    </div>
 
-<section>
-<h2>EQUIPOS</h2>
-<p>Total: <span id="totalEquipos">0</span> / 16</p>
-<div id="teamsContainer"></div>
-</section>
+    <div class="card">
+        <h3>👥 Equipos Registrados</h3>
+        <div id="teams"></div>
+    </div>
 
-<script src="firebase-config.js"></script>
-<script src="app.js"></script>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
+// 🔥 PEGA TU CONFIG REAL AQUÍ
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_AUTH_DOMAIN",
+  projectId: "TU_PROJECT_ID",
+  storageBucket: "TU_BUCKET",
+  messagingSenderId: "TU_SENDER",
+  appId: "TU_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// REGISTRAR
+function registrar(){
+    let team = document.getElementById("teamName").value;
+    let captain = document.getElementById("captain").value;
+    let contact = document.getElementById("contact").value;
+
+    if(!team || !captain || !contact){
+        alert("Completa todo");
+        return;
+    }
+
+    db.collection("equipos").add({
+        teamName: team,
+        captain: captain,
+        contact: contact,
+        timestamp: Date.now()
+    });
+
+    window.open("https://chat.whatsapp.com/EDLgOCOg7dACXYFtHRhDIu?mode=gi_t");
+}
+
+// TIEMPO REAL
+db.collection("equipos").orderBy("timestamp").onSnapshot(snapshot => {
+    let html = "";
+    snapshot.forEach(doc => {
+        let e = doc.data();
+        html += `
+        <div class="team">
+            <b>${e.teamName}</b><br>
+            👑 ${e.captain}<br>
+            📱 ${e.contact}
+        </div>`;
+    });
+    document.getElementById("teams").innerHTML = html;
+});
+</script>
 
 </body>
 </html>

@@ -1,47 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Torneo Dota 2</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOTA 2 TOURNAMENT</title>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>🔥 TORNEO DOTA 2 🔥</h1>
+<header class="hero">
+  <h1>THE INTERNATIONAL STYLE</h1>
+  <p>TORNEO DOTA 2</p>
+
+  <div class="buttons">
+    <a href="#registro" class="btn">REGISTRAR</a>
+    <a href="https://chat.whatsapp.com/EDLgOCOg7dACXYFtHRhDIu?mode=gi_t" target="_blank" class="btn green">WHATSAPP</a>
+  </div>
+</header>
 
 <!-- REDES -->
 <div class="redes">
   <a href="https://tiktok.com/@brayner722" target="_blank">🎵 TikTok</a>
   <a href="https://kick.com/brayner45" target="_blank">🎮 Kick</a>
-  <a href="https://chat.whatsapp.com/EDLgOCOg7dACXYFtHRhDIu?mode=gi_t" target="_blank">📲 WhatsApp</a>
 </div>
 
-<h2>Registrar Equipo</h2>
+<section id="registro">
+<h2>REGISTRAR EQUIPO</h2>
 
 <form id="registroForm">
-  <input id="teamName" placeholder="Nombre del equipo"><br>
-  <input id="captain" placeholder="Capitán"><br>
-  <input id="contact" placeholder="WhatsApp"><br>
+<input id="teamName" placeholder="Nombre del equipo">
+<input id="captain" placeholder="Capitán">
+<input id="contact" placeholder="WhatsApp">
 
-  <input id="p1" placeholder="Jugador 1"><br>
-  <input id="p2" placeholder="Jugador 2"><br>
-  <input id="p3" placeholder="Jugador 3"><br>
-  <input id="p4" placeholder="Jugador 4"><br>
-  <input id="p5" placeholder="Jugador 5"><br>
+<input id="p1" placeholder="Jugador 1">
+<input id="p2" placeholder="Jugador 2">
+<input id="p3" placeholder="Jugador 3">
+<input id="p4" placeholder="Jugador 4">
+<input id="p5" placeholder="Jugador 5">
 
-  <button type="submit">Registrar</button>
+<button type="submit">INSCRIBIR</button>
 </form>
+</section>
 
-<h2>Equipos Registrados</h2>
-<p>Total: <span id="totalEquipos">0</span></p>
-<p>Cupos libres: <span id="cuposLibres">16</span></p>
-
+<section>
+<h2>EQUIPOS</h2>
+<p>Total: <span id="totalEquipos">0</span> / 16</p>
 <div id="teamsContainer"></div>
+</section>
 
 <script src="firebase-config.js"></script>
 <script src="app.js"></script>

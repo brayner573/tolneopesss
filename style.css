@@ -1,0 +1,31 @@
+body {
+  background: #0a0a0f;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+
+input {
+  margin: 5px;
+  padding: 10px;
+  width: 200px;
+}
+
+button {
+  padding: 10px 20px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.team-card {
+  border: 1px solid gold;
+  margin: 10px;
+  padding: 10px;
+}
+
+.redes a {
+  margin: 10px;
+  color: gold;
+}
